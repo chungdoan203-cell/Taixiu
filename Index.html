@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Tài Xỉu Casino Sunwin Style</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{
+  --bg:#07091a;
+  --card1:#1b2160;
+  --card2:#131744;
+  --gold1:#ffd54f;
+  --gold2:#f1c40f;
+  --red:#e53935;
+  --blue:#1e88e5;
+  --green:#4caf50;
+}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  background:radial-gradient(circle at top,#1a1f55,#07091a 70%);
+  color:#fff;
+}
+.app{max-width:420px;margin:auto;padding:10px}
+
+/* ===== MARQUEE ===== */
+.marquee{
+  background:linear-gradient(90deg,#b71c1c,#ff5252);
+  border-radius:14px;
+  padding:8px 0;
+  overflow:hidden;
+  white-space:nowrap;
+  margin-bottom:10px;
+}
+.marquee span{
+  display:inline-block;
+  padding-left:100%;
+  font-weight:600;
+  animation:run 14s linear infinite;
+}
+@keyframes run{to{transform:translateX(-100%)}}
+
+/* ===== CARD ===== */
+.card{
+  background:linear-gradient(180deg,var(--card1),var(--card2));
+  border-radius:18px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 12px 30px rgba(0,0,0,.6),
+             inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+/* ===== TOP ===== */
+.top{
+  display:flex;
+  justify-content:space-between;
+  font-weight:700;
+}
+.balance{color:var(--gold1)}
+
+/* ===== TIMER ===== */
+.timer{
+  text-align:center;
+  font-size:20px;
+  font-weight:800;
+  color:var(--gold1);
+}
+.lock{text-align:center;color:#ff6b6b;font-weight:700}
+
+/* ===== DICE ===== */
+.dice-box{
+  display:flex;
+  justify-content:center;
+  margin:14px 0;
+}
+.dice{
+  width:62px;height:62px;
+  background:#fff;
+  border-radius:14px;
+  margin:6px;
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.15),
+             0 6px 14px rgba(0,0,0,.4);
+}
+.rolling{animation:spin .35s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== INPUT & BUTTON ===== */
+input{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  background:#0e133a;
+  color:#fff;
+  font-size:16px;
+}
+.row{display:flex;gap:8px;margin-top:6px}
+button{
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  font-weight:800;
+  font-size:15px;
+  transition:.15s;
+}
+button:active{transform:scale(.96)}
+.bet-btn{background:linear-gradient(180deg,var(--gold1),var(--gold2))}
+.btn-tai{background:linear-gradient(180deg,#ff6b6b,var(--red))}
+.btn-xiu{background:linear-gradient(180deg,#64b5f6,var(--blue))}
+.btn-ok{background:linear-gradient(180deg,#66ff99,var(--green))}
+.btn-cancel{background:#374074;color:#fff}
+
+/* ===== STATUS ===== */
+.status-ok{color:#66ff99;font-weight:800}
+.status-cancel{color:#ff6b6b;font-weight:800}
+
+/* ===== MONEY EFFECT ===== */
+.effect{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:15px;
+  font-weight:800;
+  animation:fly 1s ease-out forwards;
+}
+.win{color:var(--gold1)}
+.lose{color:#ff6b6b}
+@keyframes fly{
+  0%{opacity:0;top:65%}
+  20%{opacity:1}
+  100%{opacity:0;top:40%}
+}
+
+/* ===== POPUP ===== */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+}
+.popup{
+  background:linear-gradient(180deg,var(--card1),var(--card2));
+  width:92%;
+  max-width:380px;
+  border-radius:18px;
+  padding:14px;
+}
+.popup h3{text-align:center;color:var(--gold1)}
+.close{text-align:right;font-size:22px;cursor:pointer}
+
+/* ===== ROAD ===== */
+.road,.bigroad,.diag{
+  background:#060818;
+  border-radius:12px;
+  padding:8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+}
+.grid{display:grid;grid-auto-flow:column;grid-auto-columns:18px;gap:4px}
+.dot{width:14px;height:14px;border-radius:50%}
+.tai{background:var(--red)}
+.xiu{background:var(--blue)}
+.winDot{background:var(--gold1)}
+.loseDot{background:#555}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<div class="marquee">
+  <span id="notice">🎉 abcX92k đã thắng 200.000đ</span>
+</div>
+
+<div class="card top">
+  <div>👤 Kisstv</div>
+  <div class="balance">💰 <span id="coin">2000</span></div>
+</div>
+
+<div class="card" style="position:relative">
+  <div class="timer">⏳ <span id="time">45</span>s</div>
+  <div class="lock" id="lockText"></div>
+
+  <div class="dice-box">
+    <canvas id="d1" class="dice" width="60" height="60"></canvas>
+    <canvas id="d2" class="dice" width="60" height="60"></canvas>
+    <canvas id="d3" class="dice" width="60" height="60"></canvas>
+  </div>
+
+  <input id="bet" value="1000">
+
+  <div class="row">
+    <button class="bet-btn" onclick="setBet(1000)">1K</button>
+    <button class="bet-btn" onclick="setBet(5000)">5K</button>
+    <button class="bet-btn" onclick="setBet(10000)">10K</button>
+    <button class="bet-btn" onclick="setBet(20000)">20K</button>
+  </div>
+
+  <div class="row">
+    <button class="btn-tai" onclick="selectGate('tai')">TÀI</button>
+    <button class="btn-xiu" onclick="selectGate('xiu')">XỈU</button>
+  </div>
+
+  <div class="row">
+    <button class="btn-ok" onclick="placeBet()">ĐẶT CƯỢC</button>
+    <button class="btn-cancel" onclick="cancelBet()">HUỶ</button>
+  </div>
+
+  <div class="row">
+    <button class="bet-btn" onclick="openPopup('road')">📊 Cầu</button>
+    <button class="bet-btn" onclick="openPopup('history')">🧾 Lịch sử</button>
+  </div>
+
+  <div id="betStatus"></div>
+  <div id="effectBox"></div>
+</div>
+</div>
+
+<!-- POPUP CẦU -->
+<div class="overlay" id="popup-road">
+  <div class="popup">
+    <div class="close" onclick="closePopup()">❌</div>
+    <h3>📊 Cầu</h3>
+    <div class="road" id="road"></div>
+    <div class="bigroad grid" id="bigroad"></div>
+    <div class="diag" id="diag"></div>
+  </div>
+</div>
+
+<!-- POPUP LỊCH SỬ -->
+<div class="overlay" id="popup-history">
+  <div class="popup">
+    <div class="close" onclick="closePopup()">❌</div>
+    <h3>🧾 Lịch sử</h3>
+    <div id="historyDots"></div>
+  </div>
+</div>
+
+<script>
+let coin=2000,gate=null,confirmed=false,timer=45;
+let road=[],big=[],diag=[],history=[];
+
+function rand(){return crypto.getRandomValues(new Uint32Array(1))[0]%6+1}
+
+function drawDice(c,n){
+  let x=c.getContext("2d");
+  x.clearRect(0,0,60,60);
+  x.fillStyle="#fff";x.fillRect(0,0,60,60);
+  x.fillStyle="#000";
+  const p={1:[[30,30]],2:[[15,15],[45,45]],3:[[15,15],[30,30],[45,45]],
+  4:[[15,15],[45,15],[15,45],[45,45]],
+  5:[[15,15],[45,15],[30,30],[15,45],[45,45]],
+  6:[[15,15],[15,30],[15,45],[45,15],[45,30],[45,45]]};
+  p[n].forEach(a=>{x.beginPath();x.arc(a[0],a[1],5,0,7);x.fill()});
+}
+
+function setBet(v){if(timer<=5)return alert("Hãy đợi ván sau");bet.value=v}
+function selectGate(g){gate=g}
+
+function placeBet(){
+  if(timer<=5)return alert("Hãy đợi ván sau");
+  if(!gate)return alert("Vui lòng chọn cửa");
+ 
